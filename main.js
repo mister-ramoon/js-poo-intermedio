@@ -1,15 +1,3 @@
-const obj1 = {
-  a: "a",
-  b: "b",
-  c: {
-    d: "d",
-    e: "e",
-  },
-  editA() {
-    this.a = "AAA";
-  },
-};
-
 function isObject(subject) {
   return typeof subject == "object";
 }
@@ -48,3 +36,26 @@ function deepCopy(subject) {
 
   return copySubject;
 }
+
+const studentBase = {
+  name: undefined,
+  email: undefined,
+  age: undefined,
+  approvedCourses: undefined,
+  learningPaths: undefined,
+  socialMedia: {
+    twitter: undefined,
+    instagram: undefined,
+    facebook: undefined,
+  },
+};
+
+const juan = deepCopy(studentBase);
+//juan.name = "Juanito";
+// Object.defineProperty(juan, "name", {
+//   value: "Juanito",
+//   configurable: false,
+// });
+Object.seal(juan);
+juan.name = "Juanito";
+Object.isSealed(juan);
