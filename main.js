@@ -37,21 +37,34 @@ function deepCopy(subject) {
   return copySubject;
 }
 
-// const studentBase = {
-//   name: undefined,
-//   email: undefined,
-//   age: undefined,
-//   approvedCourses: undefined,
-//   learningPaths: undefined,
-//   socialMedia: {
-//     twitter: undefined,
-//     instagram: undefined,
-//     facebook: undefined,
-//   },
-// };
-
 function requiredParam(param) {
   throw new Error(param + " es obligatorio");
+}
+
+function createLearningPath({ name = requiredParam("name"), courses = [] }) {
+  const private = {
+    _name: name,
+    _courses: courses,
+  };
+
+  const public = {
+    get name() {
+      return private._name;
+    },
+    set name(newName) {
+      if (newName.length != 0) {
+        private._name = newName;
+      } else {
+        console.warn("Tu nombre debe tener al menos 1 cáracter");
+      }
+    },
+
+    get courses() {
+      return private._courses;
+    },
+  };
+
+  return public;
 }
 
 function createStudent({
@@ -66,6 +79,7 @@ function createStudent({
 } = {}) {
   const private = {
     _name: name,
+    _learningPaths: [],
   };
 
   const public = {
@@ -77,13 +91,7 @@ function createStudent({
       facebook,
     },
     approvedCourses,
-    learningPaths,
-    // readName() {
-    //   return private._name;
-    // },
-    // changeName(newName) {
-    //   private._name = newName;
-    // },
+
     get name() {
       return private._name;
     },
@@ -94,12 +102,29 @@ function createStudent({
         console.warn("Tu nombre debe tener al menos 1 cáracter");
       }
     },
-  };
 
-  // Object.defineProperty(public, "readName", {
-  //   configurable: false,
-  //   writable: false,
-  // });
+    get learningPaths() {
+      return private._learningPaths;
+    },
+    set learningPaths(newLP) {
+      if (!newLP.name) {
+        console.warn("Tu LP no tiene la propiedad name");
+        return;
+      }
+
+      if (!newLP.courses) {
+        console.warn("Tu LP no tiene courses");
+        return;
+      }
+
+      if (!isArray(newLP.courses)) {
+        console.warn("Tu LP no es un arreglo");
+        return;
+      }
+
+      private._learningPaths.push(newLP);
+    },
+  };
 
   return public;
 }
