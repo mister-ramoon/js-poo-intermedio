@@ -90,61 +90,28 @@ function Student({
     facebook,
   };
 
-  if (isArray(learningPaths)) {
-    this.learningPaths = [];
+  const private = {
+    _learningPaths: [],
+  };
 
-    for (learningPathIndex in learningPaths) {
-      if (!learningPaths[learningPathIndex] instanceof LearningPath) {
-        this.learningPaths.push(learningPaths[learningPathIndex]);
+  Object.defineProperty(this, "learningPaths", {
+    get() {
+      return private._learningPaths;
+    },
+    set(newLp) {
+      if (newLp instanceof LearningPath) {
+        private._learningPaths.push(newLp);
+      } else {
+        console.warn(
+          "Alguno de los LPs no es una instancia del prototipo LearningPath"
+        );
       }
-    }
+    },
+  });
+
+  for (learningPathIndex in learningPaths) {
+    this.learningPaths = learningPaths[learningPathIndex];
   }
-
-  this.learningPaths = learningPaths;
-
-  // const private = {
-  //   _name: name,
-  //   _learningPaths: [],
-  // };
-  // const public = {
-  //   email,
-  //   age,
-  //   socialMedia: {
-  //     twitter,
-  //     instagram,
-  //     facebook,
-  //   },
-  //   approvedCourses,
-  //   get name() {
-  //     return private._name;
-  //   },
-  //   set name(newName) {
-  //     if (newName.length != 0) {
-  //       private._name = newName;
-  //     } else {
-  //       console.warn("Tu nombre debe tener al menos 1 cáracter");
-  //     }
-  //   },
-  //   get learningPaths() {
-  //     return private._learningPaths;
-  //   },
-  //   set learningPaths(newLP) {
-  //     if (!newLP.name) {
-  //       console.warn("Tu LP no tiene la propiedad name");
-  //       return;
-  //     }
-  //     if (!newLP.courses) {
-  //       console.warn("Tu LP no tiene courses");
-  //       return;
-  //     }
-  //     if (!isArray(newLP.courses)) {
-  //       console.warn("Tu LP no es un arreglo");
-  //       return;
-  //     }
-  //     private._learningPaths.push(newLP);
-  //   },
-  // };
-  // return public;
 }
 
 const escuelaWeb = new LearningPath({
