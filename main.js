@@ -37,6 +37,73 @@ function deepCopy(subject) {
   return copySubject;
 }
 
+// class SuperObject {
+//   static isObject(subject) {
+//     return typeof subject == "object";
+//   }
+
+//   static deepCopy(subject) {
+//     let copySubject;
+
+//     const subjectIsArray = isArray(subject);
+//     const subjectIsObject = isObject(subject);
+
+//     if (subjectIsArray) {
+//       copySubject = [];
+//     } else if (subjectIsObject) {
+//       copySubject = {};
+//     } else {
+//       return subject;
+//     }
+
+//     for (key in subject) {
+//       const keyIsObject = isObject(subject[key]);
+
+//       if (keyIsObject) {
+//         copySubject[key] = deepCopy(subject[key]);
+//       } else {
+//         if (subjectIsArray) {
+//           copySubject.push(subject[key]);
+//         } else {
+//           copySubject[key] = subject[key];
+//         }
+//       }
+//     }
+//   }
+// }
+
+function SuperObject() {}
+SuperObject.prototype.deepCopy = function (subject) {
+  let copySubject;
+
+  const subjectIsArray = isArray(subject);
+  const subjectIsObject = isObject(subject);
+
+  if (subjectIsArray) {
+    copySubject = [];
+  } else if (subjectIsObject) {
+    copySubject = {};
+  } else {
+    return subject;
+  }
+
+  for (key in subject) {
+    const keyIsObject = isObject(subject[key]);
+
+    if (keyIsObject) {
+      copySubject[key] = deepCopy(subject[key]);
+    } else {
+      if (subjectIsArray) {
+        copySubject.push(subject[key]);
+      } else {
+        copySubject[key] = subject[key];
+      }
+    }
+  }
+
+  return copySubject;
+};
+
 function requiredParam(param) {
   throw new Error(param + " es obligatorio");
 }
