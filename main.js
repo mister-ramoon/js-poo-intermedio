@@ -41,33 +41,36 @@ function requiredParam(param) {
   throw new Error(param + " es obligatorio");
 }
 
-function createLearningPath({ name = requiredParam("name"), courses = [] }) {
-  const private = {
-    _name: name,
-    _courses: courses,
-  };
+function LearningPath({ name = requiredParam("name"), courses = [] }) {
+  this.name = name;
+  this.courses = courses;
 
-  const public = {
-    get name() {
-      return private._name;
-    },
-    set name(newName) {
-      if (newName.length != 0) {
-        private._name = newName;
-      } else {
-        console.warn("Tu nombre debe tener al menos 1 cáracter");
-      }
-    },
+  // const private = {
+  //   _name: name,
+  //   _courses: courses,
+  // };
 
-    get courses() {
-      return private._courses;
-    },
-  };
+  // const public = {
+  //   get name() {
+  //     return private._name;
+  //   },
+  //   set name(newName) {
+  //     if (newName.length != 0) {
+  //       private._name = newName;
+  //     } else {
+  //       console.warn("Tu nombre debe tener al menos 1 cáracter");
+  //     }
+  //   },
 
-  return public;
+  //   get courses() {
+  //     return private._courses;
+  //   },
+  // };
+
+  // return public;
 }
 
-function createStudent({
+function Student({
   name = requiredParam("name"),
   email = requiredParam("email"),
   age,
@@ -77,59 +80,84 @@ function createStudent({
   approvedCourses = [],
   learningPaths = [],
 } = {}) {
-  const private = {
-    _name: name,
-    _learningPaths: [],
+  this.name = name;
+  this.email = email;
+  this.age = age;
+  this.approvedCourses = approvedCourses;
+  this.socialMedia = {
+    twitter,
+    instagram,
+    facebook,
   };
 
-  const public = {
-    email,
-    age,
-    socialMedia: {
-      twitter,
-      instagram,
-      facebook,
-    },
-    approvedCourses,
+  if (isArray(learningPaths)) {
+    this.learningPaths = [];
 
-    get name() {
-      return private._name;
-    },
-    set name(newName) {
-      if (newName.length != 0) {
-        private._name = newName;
-      } else {
-        console.warn("Tu nombre debe tener al menos 1 cáracter");
+    for (learningPathIndex in learningPaths) {
+      if (!learningPaths[learningPathIndex] instanceof LearningPath) {
+        this.learningPaths.push(learningPaths[learningPathIndex]);
       }
-    },
+    }
+  }
 
-    get learningPaths() {
-      return private._learningPaths;
-    },
-    set learningPaths(newLP) {
-      if (!newLP.name) {
-        console.warn("Tu LP no tiene la propiedad name");
-        return;
-      }
+  this.learningPaths = learningPaths;
 
-      if (!newLP.courses) {
-        console.warn("Tu LP no tiene courses");
-        return;
-      }
-
-      if (!isArray(newLP.courses)) {
-        console.warn("Tu LP no es un arreglo");
-        return;
-      }
-
-      private._learningPaths.push(newLP);
-    },
-  };
-
-  return public;
+  // const private = {
+  //   _name: name,
+  //   _learningPaths: [],
+  // };
+  // const public = {
+  //   email,
+  //   age,
+  //   socialMedia: {
+  //     twitter,
+  //     instagram,
+  //     facebook,
+  //   },
+  //   approvedCourses,
+  //   get name() {
+  //     return private._name;
+  //   },
+  //   set name(newName) {
+  //     if (newName.length != 0) {
+  //       private._name = newName;
+  //     } else {
+  //       console.warn("Tu nombre debe tener al menos 1 cáracter");
+  //     }
+  //   },
+  //   get learningPaths() {
+  //     return private._learningPaths;
+  //   },
+  //   set learningPaths(newLP) {
+  //     if (!newLP.name) {
+  //       console.warn("Tu LP no tiene la propiedad name");
+  //       return;
+  //     }
+  //     if (!newLP.courses) {
+  //       console.warn("Tu LP no tiene courses");
+  //       return;
+  //     }
+  //     if (!isArray(newLP.courses)) {
+  //       console.warn("Tu LP no es un arreglo");
+  //       return;
+  //     }
+  //     private._learningPaths.push(newLP);
+  //   },
+  // };
+  // return public;
 }
 
-const juan = createStudent({
+const escuelaWeb = new LearningPath({
+  name: "Escuela de WebDev",
+  courses: [
+    "Curso Definitivo de HTML y CSS",
+    "Curso Práctico de HTML y CSS",
+    "Curso de Responsive Design",
+  ],
+});
+
+const juan = new Student({
   name: "Juanito",
   email: "juan@gmail.com",
+  learningPaths: [escuelaWeb],
 });
